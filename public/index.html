@@ -7,6 +7,9 @@
   </head>
   <body>
     <h1>Welcome to webscrapper</h1>
+    <br />
+    <label for="scrapeUrl">Url to scrape:</label>
+    <input type="text" id="scrapeUrl" required />
     <button id="myButton">Click me!</button>
     <p id="message"></p>
     <br />
@@ -20,6 +23,7 @@
       <p id="url">URL: Loading...</p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

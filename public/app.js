@@ -18,10 +18,11 @@ function updateMetadata(metadata) {
 
 document.getElementById("myButton").addEventListener("click", async () => {
   console.log("tk html button clicked 2");
+  const scrapeUrl = document.getElementById("scrapeUrl").value;
   try {
-    //   document.getElementById("message").innerText = "Button clicked!";
-    const response = await fetch("/api/data"); // Assumes your server is running on the same domain
-    const data = await response.json();
+    const response = await axios.post("/api/data", { url: scrapeUrl });
+
+    const data = await response.data;
     console.log("tk resp data", data);
     updateMetadata(data.metaData);
     document.getElementById("message").innerText = JSON.stringify(data);

@@ -10,6 +10,9 @@ const url = require("url");
 // Serve static files from the "public" directory
 app.use(express.static("../public"));
 
+// Parse JSON request bodies
+app.use(express.json());
+
 // Sanitize
 function escapeColons(selector) {
   return selector.replace(/\:/g, "\\:");
@@ -20,6 +23,51 @@ app.get("/api/data", async (req, res) => {
   const targetUrl =
     "https://books.toscrape.com/catalogue/category/books/mystery_3/index.html";
 
+  try {
+    const response = await axios.get(targetUrl);
+    const html = response.data;
+
+    // Parse HTML using Cheerio
+    const $ = cheerio.load(html);
+
+    const selector = "h1";
+
+    const modifiedSelector = escapeColons(selector);
+
+    const scrapedData = $(selector, html).text();
+
+    // Function to resolve relative URLs to absolute URLs
+    function resolveRelativeUrl(baseUrl, relativeUrl) {
+      return url.resolve(baseUrl, relativeUrl);
+    }
+
+    faviconRelativeUrl = $('link[rel="icon"]').attr("href");
+    const faviconUrl = faviconRelativeUrl
+      ? resolveRelativeUrl(targetUrl, faviconRelativeUrl)
+      : null;
+
+    const basicMeta = {
+      title: $("head title").text(),
+      description: $('meta[name="description"]').attr("content"),
+      keywords: $('meta[name="keywords"]').attr("content"),
+      author: $('meta[name="author"]').attr("content"),
+      image: $('meta[property="og:image"]').attr("content"),
+      favicon: faviconUrl,
+      url: targetUrl,
+    };
+    res.json({ scrapedData: scrapedData, metaData: basicMeta });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// POST
+app.post("/api/data", async (req, res) => {
+  const requestData = req.body;
+  // res.json({ message: "POST request received " + requestData.url });
+
+  const targetUrl = requestData.url;
   try {
     const response = await axios.get(targetUrl);
     const html = response.data;
