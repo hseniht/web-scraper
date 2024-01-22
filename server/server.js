@@ -68,6 +68,9 @@ app.post("/api/data", async (req, res) => {
   // res.json({ message: "POST request received " + requestData.url });
 
   const targetUrl = requestData.url;
+  const parentSelector = requestData.parentSelector;
+  const childSelectors = requestData.childSelectors;
+  const scrapedData = [];
   try {
     const response = await axios.get(targetUrl);
     const html = response.data;
@@ -75,11 +78,26 @@ app.post("/api/data", async (req, res) => {
     // Parse HTML using Cheerio
     const $ = cheerio.load(html);
 
-    const selector = "h1";
+    const modifiedSelector = escapeColons(parentSelector);
 
-    const modifiedSelector = escapeColons(selector);
+    const scrapedDom = $(parentSelector, html);
 
-    const scrapedData = $(selector, html).text();
+    scrapedDom.each(function () {
+      const dataObject = {}; // Create an empty object to store each pair of title and price
+
+      for (let i = 0; i < childSelectors.length; i++) {
+        const field = Object.keys(childSelectors[i]);
+        const text = $(this).find(childSelectors[i][field]).text();
+
+        if (field.length > 0) {
+          // Add the key-value pair to the dataObject
+          dataObject[field[0]] = text;
+        }
+      }
+
+      // Push the combined title and price to scrapedData
+      scrapedData.push(dataObject);
+    });
 
     // Function to resolve relative URLs to absolute URLs
     function resolveRelativeUrl(baseUrl, relativeUrl) {
