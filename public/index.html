@@ -10,22 +10,22 @@
     <br />
     <label for="scrapeUrl">Url to scrape:</label>
     <input type="text" id="scrapeUrl" required />
-    <br>
+    <br />
     <label for="domSelector">Selector:</label>
     <input type="text" id="domSelector" />
-    <br>
-    <br>
-    <label for="field1">Child 1:</label>
-    <input type="text" id="field1" />
-    <label for="selector1">selector 1:</label>
-    <input type="text" id="selector1" />
-    <br>
-    <label for="field2">Child 2:</label>
-    <input type="text" id="field2" />
-    <label for="selector2">selector 2:</label>
-    <input type="text" id="selector2" />
-
-
+    <br />
+    <br />
+    <ol id="dynamicList">
+      <li>
+        <label for="field1">Child 1:</label>
+        <input type="text" id="field1" />
+        <label for="selector1">selector 1:</label>
+        <input type="text" id="selector1" />
+      </li>
+    </ol>
+    <br />
+    <button onclick="addListItem()">Add List Item</button>
+    <br />
     <button id="myButton">Scrape!</button>
     <p id="message"></p>
     <br />

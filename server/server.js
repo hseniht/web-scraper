@@ -82,12 +82,14 @@ app.post("/api/data", async (req, res) => {
 
     const scrapedDom = $(parentSelector, html);
 
+    // make it more dynamic base on input
+
     scrapedDom.each(function () {
       const dataObject = {}; // Create an empty object to store each pair of title and price
 
       for (let i = 0; i < childSelectors.length; i++) {
         const field = Object.keys(childSelectors[i]);
-        const text = $(this).find(childSelectors[i][field]).text();
+        const text = $(this).find(childSelectors[i][field]).text().trim();
 
         if (field.length > 0) {
           // Add the key-value pair to the dataObject

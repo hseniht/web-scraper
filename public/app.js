@@ -16,17 +16,78 @@ function updateMetadata(metadata) {
   document.getElementById("url").textContent = "URL: " + metadata.url;
 }
 
-document.getElementById("myButton").addEventListener("click", async () => {
+function addListItem() {
+  // Determine the number of existing list items
+  var list = document.getElementById("dynamicList");
+  var itemCount = list.getElementsByTagName("li").length + 1;
+
+  // Create new list item
+  var newItem = document.createElement("li");
+
+  // Create labels and inputs
+  var label1 = document.createElement("label");
+  label1.setAttribute("for", "field" + itemCount);
+  label1.textContent = "Child " + itemCount + ":";
+
+  var input1 = document.createElement("input");
+  input1.setAttribute("type", "text");
+  input1.setAttribute("id", "field" + itemCount);
+
+  var label2 = document.createElement("label");
+  label2.setAttribute("for", "selector" + itemCount);
+  label2.textContent = "selector " + itemCount + ":";
+
+  var input2 = document.createElement("input");
+  input2.setAttribute("type", "text");
+  input2.setAttribute("id", "selector" + itemCount);
+
+  // Append labels and inputs to the new list item
+  newItem.appendChild(label1);
+  newItem.appendChild(input1);
+  newItem.appendChild(label2);
+  newItem.appendChild(input2);
+
+  // Append the new list item to the existing list
+  list.appendChild(newItem);
+}
+
+const mapFieldsToSelectorArray = () => {
+  const childSelectors = [];
+
+  // Get values of scrapeUrl and parentSelector
   const scrapeUrl = document.getElementById("scrapeUrl").value;
   const parentSelector = document.getElementById("domSelector").value;
-  const field1 = document.getElementById("field1").value;
-  const selector1 = document.getElementById("selector1").value;
-  const field2 = document.getElementById("field2").value;
-  const selector2 = document.getElementById("selector2").value;
 
-  childSelectors = [{ [field1]: selector1 }, { [field2]: selector2 }];
-  console.log("tk dynamic arr", childSelectors);
-  console.log("tk dynamic arr 1", childSelectors[1]);
+  // Get the number of existing list items
+  const listItemCount = document.querySelectorAll("#dynamicList li").length;
+
+  // Iterate through each list item to get field-value and selector-value pairs
+  for (let i = 1; i <= listItemCount; i++) {
+    const field = document.getElementById("field" + i).value;
+    const selector = document.getElementById("selector" + i).value;
+
+    // Create an object with field-value and selector-value pairs
+    const childSelectorObj = {};
+    childSelectorObj[field] = selector;
+
+    // Push the object to the childSelectors array
+    childSelectors.push(childSelectorObj);
+  }
+
+  return {
+    scrapeUrl: scrapeUrl,
+    parentSelector: parentSelector,
+    childSelectors: childSelectors,
+  };
+};
+
+// Example usage:
+const result = mapFieldsToSelectorArray();
+console.log(result);
+
+document.getElementById("myButton").addEventListener("click", async () => {
+  const { scrapeUrl, parentSelector, childSelectors } =
+    mapFieldsToSelectorArray();
   try {
     const response = await axios.post("/api/data", {
       url: scrapeUrl,
