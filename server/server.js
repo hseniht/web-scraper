@@ -82,6 +82,7 @@ app.post("/api/data", async (req, res) => {
 
     const scrapedDom = $(parentSelector, html);
 
+    // console.log("tk scrapedDOM", $(parentSelector).attr('class'));
     // make it more dynamic base on input
 
     scrapedDom.each(function () {

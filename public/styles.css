@@ -1,0 +1,12 @@
+.snippet {
+  font-family: monospace;
+  background-color: #353535;
+  /* color: mediumseagreen; */
+  color: yellowgreen;
+  padding: 20px;
+  border-radius: 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  display: flex;
+  flex-direction: column;
+}

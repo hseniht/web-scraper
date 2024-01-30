@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web Scrapper</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <h1>Welcome to webscrapper</h1>
@@ -27,7 +28,10 @@
     <button onclick="addListItem()">Add List Item</button>
     <br />
     <button id="myButton">Scrape!</button>
-    <p id="message"></p>
+    <section class="snippet">
+      <code id="scrappedData"></code>
+      <p id="message"></p>
+    </section>
     <br />
     <div id="metadata-container">
       <p id="title">Title: Loading...</p>

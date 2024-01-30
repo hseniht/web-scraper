@@ -81,7 +81,19 @@ const mapFieldsToSelectorArray = () => {
   };
 };
 
-// Example usage:
+const snippitizer = (items) => {
+  const terminalElement = document.getElementById("scrappedData");
+  terminalElement.innerHTML = "<span>Scraped data = [</span><br>";
+
+  items.forEach((item) => {
+    terminalElement.innerHTML += `<span>&nbsp;&nbsp;&nbsp;&nbsp;${JSON.stringify(
+      item
+    )},</span><br>`;
+  });
+
+  terminalElement.innerHTML += "<span>];</span>";
+};
+
 const result = mapFieldsToSelectorArray();
 console.log(result);
 
@@ -96,11 +108,15 @@ document.getElementById("myButton").addEventListener("click", async () => {
     });
 
     const data = await response.data;
-    console.log("tk resp data", data);
+    if (data.scrapedData.length > 0) {
+      snippitizer(data.scrapedData);
+      document.getElementById("message").innerText = "";
+    } else {
+      console.log("tk resp shorter");
+      document.getElementById("scrappedData").innerHTML = "";
+      document.getElementById("message").innerText = "not found";
+    }
     updateMetadata(data.metaData);
-    document.getElementById("message").innerText = JSON.stringify(
-      data.scrapedData || "not found"
-    );
   } catch (error) {
     console.error(error);
     document.getElementById("message").innerText = "Error occurred";
