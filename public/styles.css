@@ -10,3 +10,31 @@
   display: flex;
   flex-direction: column;
 }
+
+#scrappedData {
+  max-height: 300px;
+  overflow: auto;
+}
+
+#scrappedData li {
+  list-style-type: none;
+  margin-left: 1em;
+}
+#scrappedData li > div {
+  display: flex;
+  flex-direction: column;
+}
+#scrappedData li > div > span {
+  margin-left: 1em;
+}
+#scrappedData li > div > span:not(:last-child)::after {
+  content: ",";
+}
+
+/* #scrappedData li::before {
+  content: "\00a0"
+} */
+
+#scrappedData li:not(:last-child)::after {
+  content: ",";
+}

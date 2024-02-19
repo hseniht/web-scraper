@@ -86,9 +86,16 @@ const snippitizer = (items) => {
   terminalElement.innerHTML = "<span>Scraped data = [</span><br>";
 
   items.forEach((item) => {
-    terminalElement.innerHTML += `<span>&nbsp;&nbsp;&nbsp;&nbsp;${JSON.stringify(
-      item
-    )},</span><br>`;
+    itemFieldValues = [];
+    // Iterate over the object properties
+    for (const key in item) {
+      if (item.hasOwnProperty(key)) {
+        const value = item[key];
+        itemFieldValues.push(`<span>${key}: ${value}</span>`);
+      }
+    }
+    const paragraph = itemFieldValues.join("");
+    terminalElement.innerHTML += `<li><div>{${paragraph}}</div></li>`;
   });
 
   terminalElement.innerHTML += "<span>];</span>";
